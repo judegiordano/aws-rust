@@ -26,7 +26,7 @@ functions:
     handler: aws-rust.ping
     events:
       - httpApi:
-          path: /ping
+          path: /api/ping
           method: GET
   pong:
     handler: aws-rust.pong
