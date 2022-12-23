@@ -1,0 +1,40 @@
+service: aws-rust
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: rust
+  region: us-east-1
+  memorySize: 2048
+  timeout: 28
+  httpApi:
+    cors: true
+    payload: "2.0"
+  environment:
+    STAGE: ${opt:stage, "dev"}
+    LOG_LEVEL: INFO
+
+plugins:
+  - serverless-rust
+
+package:
+  individually: true
+
+functions:
+  ping:
+    handler: aws-rust.ping
+    events:
+      - httpApi:
+          path: /ping
+          method: GET
+  pong:
+    handler: aws-rust.pong
+    url:
+      cors: true
+
+custom:
+  rust:
+    target: x86_64-unknown-linux-musl
+    linker: clang
+    dockerless: true

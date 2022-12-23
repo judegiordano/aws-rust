@@ -1,0 +1,10 @@
+{
+  "name": "aws-rust",
+  "version": "1.0.0",
+  "author": "Jude Giordano",
+  "keywords": [],
+  "dependencies": {
+    "serverless": "^3.24.0",
+    "serverless-rust": "^0.3.8"
+  }
+}
