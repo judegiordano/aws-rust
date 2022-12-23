@@ -6,7 +6,6 @@ provider:
   name: aws
   runtime: rust
   region: us-east-1
-  architecture: arm64
   versionFunctions: false
   memorySize: 2048
   timeout: 28
