@@ -6,11 +6,10 @@ provider:
   name: aws
   runtime: rust
   region: us-east-1
+  architecture: arm64
+  versionFunctions: false
   memorySize: 2048
   timeout: 28
-  httpApi:
-    cors: true
-    payload: "2.0"
   environment:
     STAGE: ${opt:stage, "dev"}
     LOG_LEVEL: INFO
@@ -22,14 +21,12 @@ package:
   individually: true
 
 functions:
-  ping:
-    handler: aws-rust.ping
-    events:
-      - httpApi:
-          path: /api/ping
-          method: GET
   pong:
     handler: aws-rust.pong
+    url:
+      cors: true
+  ping:
+    handler: aws-rust.ping
     url:
       cors: true
 
