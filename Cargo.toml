@@ -11,6 +11,8 @@ strip = 'symbols' # strip symbols from binary
 lto = true        # enable link time optimization
 
 [dependencies]
+anyhow = "1.0.68"
+lambda_http = "0.7.2"
 lambda_runtime = "0.7.2"
 serde = { version = "1.0.151", features = ["derive"] }
 serde_json = "1.0.91"

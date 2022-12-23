@@ -1,16 +1,17 @@
-use aws_rust::types::Message;
-use lambda_runtime::{service_fn, Error, LambdaEvent};
-use serde_json::Value;
+use anyhow::Result;
+use aws_rust::types::{Message, ResponseHelper};
+use lambda_http::{run, service_fn, Error, Request, Response};
 
-async fn ping(event: LambdaEvent<Value>) -> Result<Message, Error> {
-    let (_, _) = event.into_parts();
+async fn ping(_: Request) -> Result<Response<String>> {
     let msg = Message {
         message: "ping".to_string(),
     };
-    Ok(msg)
+    let response = msg.to_response()?;
+    Ok(response)
 }
+
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    lambda_runtime::run(service_fn(ping)).await
+    run(service_fn(ping)).await
 }
