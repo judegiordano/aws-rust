@@ -25,13 +25,13 @@ functions:
     events:
     - httpApi:
         method: GET
-        path: /pong
+        path: /api/pong
   ping:
     handler: aws-rust.ping
     events:
     - httpApi:
         method: GET
-        path: /ping
+        path: /api/ping
 
 plugins:
   - serverless-rust
