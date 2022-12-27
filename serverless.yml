@@ -15,8 +15,7 @@ provider:
     STAGE: ${opt:stage, "dev"}
     LOG_LEVEL: INFO
   httpApi:
-    cors:
-      allowCredentials: true
+    cors: true
     payload: '2.0'
 
 functions:
