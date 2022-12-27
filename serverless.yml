@@ -4,18 +4,19 @@ frameworkVersion: "3"
 
 provider:
   name: aws
+  description: Rust Serverless Template
   runtime: rust
   region: us-east-1
   versionFunctions: false
   memorySize: 2048
-  timeout: 28
+  timeout: 30
+  logRetentionInDays: 14
   environment:
     STAGE: ${opt:stage, "dev"}
     LOG_LEVEL: INFO
   httpApi:
     cors: true
     payload: '2.0'
-    # disableDefaultEndpoint: true
 
 functions:
   pong:
@@ -33,14 +34,14 @@ functions:
         method: GET
         path: /api/ping
 
-plugins:
-  - serverless-rust
-
-package:
-  individually: true
-
 custom:
   rust:
     target: x86_64-unknown-linux-musl
     linker: clang
     dockerless: true
+
+plugins:
+  - serverless-rust
+
+package:
+  individually: true
