@@ -12,22 +12,32 @@ provider:
   environment:
     STAGE: ${opt:stage, "dev"}
     LOG_LEVEL: INFO
+  httpApi:
+    cors: true
+    payload: '2.0'
+    # disableDefaultEndpoint: true
+
+functions:
+  pong:
+    handler: aws-rust.pong
+    # url:
+    #   cors: true
+    events:
+    - httpApi:
+        method: GET
+        path: /pong
+  ping:
+    handler: aws-rust.ping
+    events:
+    - httpApi:
+        method: GET
+        path: /ping
 
 plugins:
   - serverless-rust
 
 package:
   individually: true
-
-functions:
-  pong:
-    handler: aws-rust.pong
-    url:
-      cors: true
-  ping:
-    handler: aws-rust.ping
-    url:
-      cors: true
 
 custom:
   rust:
