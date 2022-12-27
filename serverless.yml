@@ -35,6 +35,11 @@ functions:
         path: /api/ping
         private: true
         cors: true
+  # Function Url
+  dev-ping:
+    handler: aws-rust.dev_ping
+    url:
+      cors: true
 
 custom:
   rust:
