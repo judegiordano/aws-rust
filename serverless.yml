@@ -39,6 +39,11 @@ functions:
     handler: aws-rust.dev_ping
     url:
       cors: true
+  # server entry point
+  http:
+    handler: aws-rust
+    url:
+      cors: true
 
 custom:
   rust:

@@ -1,0 +1,42 @@
+{
+    "Pretty Print": {
+        "scope": "rust",
+        "description": "pretty print println!",
+        "prefix": "print",
+        "body": [
+            "println!(\"{:#?}\", ${0});"
+        ]
+    },
+    "Derive Debug Attriubte": {
+        "scope": "rust",
+        "description": "derive debug attribute",
+        "prefix": "debug_attr",
+        "body": [
+            "#[derive(Debug, Deserialize, Serialize)]"
+        ]
+    },
+    "Allow Dead Code Attriubte": {
+        "scope": "rust",
+        "description": "allow dead code attribute",
+        "prefix": "allow_dead_attr",
+        "body": [
+            "#[allow(dead_code)]"
+        ]
+    },
+    "Bench Attribute": {
+        "scope": "rust",
+        "description": "benchmark attribute",
+        "prefix": "bench_attr",
+        "body": [
+            "#[bench]"
+        ]
+    },
+    "Test Attribute": {
+        "scope": "rust",
+        "description": "test attribute",
+        "prefix": "test_attr",
+        "body": [
+            "#[test]"
+        ]
+    }
+}

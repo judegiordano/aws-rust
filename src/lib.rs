@@ -22,3 +22,25 @@ pub mod types {
 
     impl ResponseHelper for Message {}
 }
+
+pub mod config {
+    pub struct Env {
+        pub log_level: tracing::Level,
+    }
+
+    impl Default for Env {
+        fn default() -> Self {
+            Self {
+                log_level: std::env::var("LOG_LEVEL").map_or(tracing::Level::ERROR, |found| {
+                    match found.to_uppercase().as_ref() {
+                        "INFO" => tracing::Level::INFO,
+                        "DEBUG" => tracing::Level::DEBUG,
+                        "WARN" => tracing::Level::WARN,
+                        "TRACE" => tracing::Level::TRACE,
+                        _ => tracing::Level::ERROR,
+                    }
+                }),
+            }
+        }
+    }
+}

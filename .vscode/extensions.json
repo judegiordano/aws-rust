@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "bungcip.better-toml",
+    "rust-lang.rust-analyzer",
+    "ms-vscode.cpptools",
+    "vadimcn.vscode-lldb",
+    "ms-azuretools.vscode-docker"
+  ]
+}
