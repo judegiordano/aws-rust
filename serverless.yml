@@ -5,7 +5,7 @@ frameworkVersion: "3"
 provider:
   name: aws
   description: Rust Serverless Template
-  runtime: rust
+  runtime: provided.al2
   region: us-east-1
   versionFunctions: false
   memorySize: 2048
@@ -15,25 +15,25 @@ provider:
     LOG_LEVEL: INFO
   httpApi:
     cors: true
-    payload: '2.0'
+    payload: "2.0"
 
 functions:
   # v2 HTTP Api
   pong:
     handler: aws-rust.pong
     events:
-    - httpApi:
-        method: GET
-        path: /api/pong
+      - httpApi:
+          method: GET
+          path: /api/pong
   # v1 REST Api
   ping:
     handler: aws-rust.ping
     events:
-    - http:
-        method: GET
-        path: /api/ping
-        private: true
-        cors: true
+      - http:
+          method: GET
+          path: /api/ping
+          private: true
+          cors: true
   # Function Url
   dev-ping:
     handler: aws-rust.dev_ping
