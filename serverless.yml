@@ -16,6 +16,9 @@ provider:
     cors: true
     payload: "2.0"
 
+package:
+  individually: true
+
 functions:
   # v2 HTTP Api
   pong:
@@ -45,11 +48,6 @@ functions:
       cors: true
 
 custom:
-  # rust:
-  #   # target: aarch64-unknown-linux-gnu
-  #   linker: clang
-  #   dockerless: true
-
   apiKeys:
     - name: ${opt:stage}-free-tier-key
       usagePlan:
@@ -75,6 +73,3 @@ custom:
 plugins:
   - serverless-rust
   - serverless-add-api-key
-
-package:
-  individually: true
