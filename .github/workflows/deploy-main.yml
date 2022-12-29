@@ -50,6 +50,7 @@ jobs:
   # cargo check job
   check:
     runs-on: ubuntu-latest
+    needs: [prisma-generate]
     steps:
       - uses: actions/checkout@v3
 
