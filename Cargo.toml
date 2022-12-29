@@ -11,13 +11,15 @@ strip = 'symbols' # strip symbols from binary
 lto = true        # enable link time optimization
 
 [dependencies]
+actix-web = "4.2.1"
 anyhow = "1.0.68"
 lambda_http = "0.7.2"
 lambda_runtime = "0.7.2"
+lambda-web = { version = "0.2.0", features = ["actix-web", "actix4"] }
+prisma-client-rust = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.3" }
+prisma-client-rust-cli = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.3" }
 serde = { version = "1.0.151", features = ["derive"] }
 serde_json = "1.0.91"
 tokio = { version = "1.22.0", features = ["macros", "rt-multi-thread"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
-actix-web = "4.2.1"
-lambda-web = { version = "0.2.0", features = ["actix-web", "actix4"] }

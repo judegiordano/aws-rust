@@ -9,12 +9,13 @@ provider:
   versionFunctions: false
   memorySize: 512
   logRetentionInDays: 14
-  environment:
-    STAGE: ${opt:stage, "dev"}
-    LOG_LEVEL: INFO
   httpApi:
     cors: true
     payload: "2.0"
+  environment:
+    STAGE: ${opt:stage, "dev"}
+    LOG_LEVEL: INFO
+    DATABASE_URL: ${env:DATABASE_URL}
 
 package:
   individually: true

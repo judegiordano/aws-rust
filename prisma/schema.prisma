@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "cargo prisma"
+  output          = "../src/prisma.rs"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  first_name  String
+  last_name   String
+  avatar_hash String
+  password    String
+  slug        String   @unique
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  // relations
+  addresses Address[]
+
+  @@index([first_name, last_name])
+  @@map("users")
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  address    Int
+  street     String
+  city       String
+  state      String
+  zip        String
+  country    String
+  apt_number String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  // relations
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  @@index(state)
+  @@index(country)
+  @@index([user_id])
+  @@map("addresses")
+}

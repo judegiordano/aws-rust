@@ -2,6 +2,7 @@ use aws_rust::config::{self, Env};
 use tracing_subscriber::FmtSubscriber;
 
 pub mod api;
+pub mod prisma;
 pub mod server;
 
 #[tokio::main]
