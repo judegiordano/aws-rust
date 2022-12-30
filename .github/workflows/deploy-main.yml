@@ -89,7 +89,7 @@ jobs:
       - name: deploy prod
         run: |
           set -euxo pipefail
-          npx serverless deploy --stage prod --conceal --silent
+          npx serverless deploy --stage prod --conceal
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
