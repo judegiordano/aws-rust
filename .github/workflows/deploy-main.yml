@@ -44,7 +44,11 @@ jobs:
           rustup target add x86_64-unknown-linux-musl
           set -ex
           sudo apt-get update
-          sudo apt-get install -y musl-tools
+          sudo apt-get install ca-certificates -y
+          sudo apt-get install build-essentials -y
+          sudo apt-get install libssl-dev -y
+          sudo apt-get install pkg-config -y
+          sudo apt-get install musl-tools -y
 
       - name: list rust versions
         run: |
