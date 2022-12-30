@@ -19,7 +19,7 @@ jobs:
       - name: install rust
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: atable
+          toolchain: stable
           profile: minimal
           override: true
           components: clippy
