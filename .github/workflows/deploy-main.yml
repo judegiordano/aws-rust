@@ -78,6 +78,7 @@ jobs:
       - name: add linux tools
         run: |
           cargo clean
+          rustup update
           rustup target add x86_64-unknown-linux-musl
           set -ex
           sudo apt-get update
