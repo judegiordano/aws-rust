@@ -4,10 +4,11 @@
   "author": "Jude Giordano",
   "keywords": [],
   "dependencies": {
-    "serverless": "^3.24.0",
-    "serverless-rust": "^0.3.8"
+    "serverless": "^3.24.0"
   },
   "devDependencies": {
-    "serverless-add-api-key": "^4.2.1"
+    "serverless-add-api-key": "^4.2.1",
+    "serverless-lift": "^1.21.0",
+    "serverless-rust": "^0.3.8"
   }
 }

@@ -78,4 +78,5 @@ custom:
 
 plugins:
   - serverless-rust
+  - serverless-lift
   - serverless-add-api-key
