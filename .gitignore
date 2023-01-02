@@ -25,5 +25,3 @@ node_modules
 # serverless
 .serverless
 
-# prisma
-src/prisma.rs
