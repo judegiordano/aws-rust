@@ -24,6 +24,7 @@ functions:
   # v2 HTTP Api
   pong:
     handler: aws-rust.pong
+    iamRoleStatements: []
     events:
       - httpApi:
           method: GET
@@ -31,6 +32,7 @@ functions:
   # v1 REST Api
   ping:
     handler: aws-rust.ping
+    iamRoleStatements: []
     events:
       - http:
           method: GET
@@ -40,11 +42,13 @@ functions:
   # Function Url
   dev-ping:
     handler: aws-rust.dev_ping
+    iamRoleStatements: []
     url:
       cors: true
   # server entry point
   http:
     handler: aws-rust
+    iamRoleStatements: []
     url:
       cors: true
 
@@ -80,3 +84,4 @@ plugins:
   - serverless-rust
   - serverless-lift
   - serverless-add-api-key
+  - serverless-iam-roles-per-function

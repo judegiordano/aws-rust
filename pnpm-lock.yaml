@@ -3,6 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   serverless: ^3.24.0
   serverless-add-api-key: ^4.2.1
+  serverless-iam-roles-per-function: ^3.2.0
   serverless-lift: ^1.21.0
   serverless-rust: ^0.3.8
 
@@ -11,6 +12,7 @@ dependencies:
 
 devDependencies:
   serverless-add-api-key: 4.2.1
+  serverless-iam-roles-per-function: 3.2.0
   serverless-lift: 1.21.0_serverless@3.26.0
   serverless-rust: 0.3.8
 
@@ -43,6 +45,10 @@ packages:
     dependencies:
       aws-cdk-lib: 2.58.1_constructs@10.1.207
       constructs: 10.1.207
+    dev: true
+
+  /@balena/dockerignore/1.0.2:
+    resolution: {integrity: sha512-wMue2Sy4GAVTk6Ic4tJVcnfdau+gx2EnG7S+uAEe+TWJFqE4YoWN4/H8MSLj4eYJKxGg26lZwboEniNiNwZQ6Q==}
     dev: true
 
   /@colors/colors/1.5.0:
@@ -886,7 +892,16 @@ packages:
       '@aws-cdk/asset-awscli-v1': 2.2.47
       '@aws-cdk/asset-kubectl-v20': 2.1.1
       '@aws-cdk/asset-node-proxy-agent-v5': 2.0.38
+      '@balena/dockerignore': 1.0.2
+      case: 1.6.3
       constructs: 10.1.207
+      fs-extra: 9.1.0
+      ignore: 5.2.4
+      jsonschema: 1.4.1
+      minimatch: 3.1.2
+      punycode: 2.1.1
+      semver: 7.3.8
+      yaml: 1.10.2
     dev: true
     bundledDependencies:
       - '@balena/dockerignore'
@@ -1177,6 +1192,11 @@ packages:
       no-case: 3.0.4
       tslib: 2.4.1
       upper-case-first: 2.0.2
+    dev: true
+
+  /case/1.6.3:
+    resolution: {integrity: sha512-mzDSXIPaFwVDvZAHqZ9VlbyF4yyXRuX6IvB06WvPYkqJVO24kX1PPhv9bfpKNFZyxYFmmgo03HUiD8iklmJYRQ==}
+    engines: {node: '>= 0.8.0'}
     dev: true
 
   /caseless/0.12.0:
@@ -3244,6 +3264,10 @@ packages:
     optionalDependencies:
       graceful-fs: 4.2.10
 
+  /jsonschema/1.4.1:
+    resolution: {integrity: sha512-S6cATIPVv1z0IlxdN+zUk5EPjkGCdnhN4wVSBlvoUO1tOLJootbo9CquNJmbIh4yikWHiUedhRYrNPn1arpEmQ==}
+    dev: true
+
   /jsprim/1.4.2:
     resolution: {integrity: sha512-P2bSOMAc/ciLz6DzgjVlGJP9+BrJWu5UDGK70C2iweC5QBIeFf0ZXRvGjEj2uYgrY2MkAAhsSWHDWlFtEroZWw==}
     engines: {node: '>=0.6.0'}
@@ -4458,6 +4482,13 @@ packages:
       chalk: 2.4.2
     dev: true
 
+  /serverless-iam-roles-per-function/3.2.0:
+    resolution: {integrity: sha512-AXmxACHEUsDcFDcv8QNwDgn2L0brRJ7pz/phD3lFB/wQ3TtPJkorC+J7PxgFQbaWIQk15EIlU83BtKXeQoPTAg==}
+    engines: {node: '>=10'}
+    dependencies:
+      lodash: 4.17.21
+    dev: true
+
   /serverless-lift/1.21.0_serverless@3.26.0:
     resolution: {integrity: sha512-GAnscek5SN121z0K9vhttGQnLlh+M/BYpF2ME1f4astnQeGxxnIwOC3/0ntC0P/jSUSucPF2vUaUdKNs+FEG0A==}
     engines: {node: '>=14.15.0 <19'}
@@ -5552,6 +5583,11 @@ packages:
 
   /yaml-ast-parser/0.0.43:
     resolution: {integrity: sha512-2PTINUwsRqSd+s8XxKaJWQlUuEMHJQyEuh2edBbW8KNJz0SJPwUSD2zRWqezFEdN7IzAgeuYHFUCF7o8zRdZ0A==}
+
+  /yaml/1.10.2:
+    resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
+    engines: {node: '>= 6'}
+    dev: true
 
   /yamljs/0.3.0:
     resolution: {integrity: sha512-C/FsVVhht4iPQYXOInoxUM/1ELSf9EsgKH34FofQOp6hwCPrW4vG4w5++TED3xRUo8gD7l0P1J1dLlDYzODsTQ==}
