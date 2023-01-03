@@ -17,9 +17,6 @@ provider:
     LOG_LEVEL: INFO
     DATABASE_URL: ${env:DATABASE_URL}
 
-package:
-  individually: true
-
 functions:
   # v2 HTTP Api
   pong:
@@ -55,7 +52,6 @@ functions:
 custom:
   rust:
     target: x86_64-unknown-linux-musl
-
   apiKeys:
     - name: ${opt:stage}-free-tier-key
       usagePlan:
@@ -83,3 +79,6 @@ plugins:
   - serverless-lift
   - serverless-add-api-key
   - serverless-iam-roles-per-function
+
+package:
+  individually: true
