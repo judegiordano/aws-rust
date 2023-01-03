@@ -15,7 +15,7 @@ provider:
   environment:
     STAGE: ${opt:stage, "dev"}
     LOG_LEVEL: INFO
-    DATABASE_URL: ${env:DATABASE_URL}
+    DB_TABLE_NAME: ${construct:example-db.tableName}
 
 functions:
   # v2 HTTP Api
@@ -73,6 +73,10 @@ custom:
         throttle:
           burstLimit: 100
           rateLimit: 20
+
+constructs:
+  example-db:
+    type: database/dynamodb-single-table
 
 plugins:
   - serverless-rust
