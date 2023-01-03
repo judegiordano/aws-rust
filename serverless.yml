@@ -52,6 +52,8 @@ functions:
 custom:
   rust:
     target: x86_64-unknown-linux-musl
+    linker: clang
+    dockerless: true
   apiKeys:
     - name: ${opt:stage}-free-tier-key
       usagePlan:
