@@ -32,6 +32,10 @@ pub mod config {
 
     impl Default for Env {
         fn default() -> Self {
+            if cfg!(debug_assertions) {
+                use dotenv::dotenv;
+                dotenv().ok();
+            }
             Self {
                 log_level: std::env::var("LOG_LEVEL").map_or(tracing::Level::ERROR, |found| {
                     match found.to_uppercase().as_ref() {
@@ -59,7 +63,8 @@ pub mod database {
     use futures::stream::TryStreamExt;
     use lazy_static::lazy_static;
     use mongodb::{
-        options::ClientOptions,
+        error::Error as MongoError,
+        options::{ClientOptions, FindOneOptions, FindOptions},
         results::{CreateIndexesResult, UpdateResult},
         Client, Collection, Database,
     };
@@ -105,6 +110,19 @@ pub mod database {
         nanoid!(20, &alphabet)
     }
 
+    #[derive(Serialize, Default)]
+    pub struct ListQueryOptions {
+        pub limit: Option<i64>,
+        pub skip: Option<u64>,
+        pub sort: Option<Document>,
+        pub projection: Option<Document>,
+    }
+
+    #[derive(Serialize, Default)]
+    pub struct FindQueryOptions {
+        pub projection: Option<Document>,
+    }
+
     #[async_trait]
     pub trait Model: Unpin + Serialize + Sized + Send + Sync + DeserializeOwned {
         fn collection_name<'a>() -> &'a str;
@@ -113,15 +131,6 @@ pub mod database {
         async fn collection() -> Collection<Self> {
             let name = Self::collection_name();
             DATABASE.get().await.collection::<Self>(name)
-        }
-
-        async fn read_by_id(_id: &str) -> Result<Self> {
-            let filter = doc! { "_id": _id };
-            let result = Self::collection().await.find_one(filter, None).await?;
-            match result {
-                Some(doc) => Ok(doc),
-                None => anyhow::bail!(format!("{} document not found", Self::collection_name())),
-            }
         }
 
         async fn count() -> Result<u64> {
@@ -137,9 +146,12 @@ pub mod database {
             Ok(self)
         }
 
-        async fn update(filter: Document, doc: Document) -> Result<UpdateResult> {
+        async fn update_one(filter: Document, updates: Document) -> Result<UpdateResult> {
             let now = chrono::Utc::now();
-            let updates = vec![doc! { "$set": doc }, doc! { "$set": { "updated_at": now } }];
+            let updates = vec![
+                doc! { "$set": updates },
+                doc! { "$set": { "updated_at": now } },
+            ];
             let updated = Self::collection()
                 .await
                 .update_one(filter, updates, None)
@@ -147,8 +159,52 @@ pub mod database {
             Ok(updated)
         }
 
-        async fn list() -> Result<Vec<Self>> {
-            let mut result = Self::collection().await.find(None, None).await?;
+        async fn update_many(filter: Document, updates: Document) -> Result<UpdateResult> {
+            let now = chrono::Utc::now();
+            let updates = vec![
+                doc! { "$set": updates },
+                doc! { "$set": { "updated_at": now } },
+            ];
+            let updated = Self::collection()
+                .await
+                .update_many(filter, updates, None)
+                .await?;
+            Ok(updated)
+        }
+
+        async fn read(
+            filter: Option<Document>,
+            options: Option<FindQueryOptions>,
+        ) -> Result<Option<Self>, MongoError> {
+            let opts = match options {
+                Some(opts) => {
+                    let options = FindOneOptions::builder()
+                        .projection(opts.projection)
+                        .build();
+                    Some(options)
+                }
+                None => None,
+            };
+            Self::collection().await.find_one(filter, opts).await
+        }
+
+        async fn list(
+            filter: Option<Document>,
+            options: Option<ListQueryOptions>,
+        ) -> Result<Vec<Self>, MongoError> {
+            let opts = match options {
+                Some(opts) => {
+                    let options = FindOptions::builder()
+                        .skip(opts.skip)
+                        .limit(opts.limit)
+                        .sort(opts.sort)
+                        .projection(opts.projection)
+                        .build();
+                    Some(options)
+                }
+                None => None,
+            };
+            let mut result = Self::collection().await.find(filter, opts).await?;
             let mut docs = vec![];
             while let Some(doc) = result.try_next().await? {
                 docs.push(doc);
