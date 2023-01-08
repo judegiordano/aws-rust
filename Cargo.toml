@@ -15,7 +15,6 @@ actix-web = "4.2.1"
 anyhow = "1.0.68"
 async_once = "0.2.6"
 async-trait = "0.1.59"
-aws-config = "0.52.0"
 bson = { version = "2.4.0", features = ["chrono-0_4"] }
 lambda_http = "0.7.2"
 lambda_runtime = "0.7.2"
