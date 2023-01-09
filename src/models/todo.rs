@@ -21,6 +21,7 @@ pub struct Todo {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Normalized {
+    #[serde(rename = "_id")]
     pub id: String,
     pub task: String,
     pub complete: bool,

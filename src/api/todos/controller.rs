@@ -4,12 +4,13 @@ use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 
-use crate::models::todo::Todo;
+use crate::models::{todo::Todo, user::User};
 use aws_rust::database::{generate_nanoid, ListQueryOptions, Model};
 
 #[derive(Deserialize, Serialize)]
 pub struct CreateTodo {
     pub task: String,
+    pub user: String,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -27,7 +28,20 @@ pub async fn create_todo(body: web::Json<CreateTodo>) -> HttpResponse {
         updated_at: now,
     };
     match todo.save().await {
-        Ok(inserted) => HttpResponse::Created().json(inserted.normalize()),
+        Ok(inserted) => {
+            // save to user
+            let update_user = User::update_one(
+                doc! { "_id": body.user.to_string() },
+                doc! { "$set": { "updated_at": now }, "$push": { "todos": inserted.id.to_string() } }
+                ,
+            )
+            .await;
+            if let Err(err) = update_user {
+                return HttpResponse::InternalServerError()
+                    .json(json!({ "error": err.to_string() }));
+            }
+            HttpResponse::Created().json(inserted.normalize())
+        }
         Err(err) => HttpResponse::InternalServerError().json(json!({ "error": err.to_string() })),
     }
 }
@@ -35,7 +49,7 @@ pub async fn create_todo(body: web::Json<CreateTodo>) -> HttpResponse {
 pub async fn complete_todo(query: web::Query<FilterById>) -> HttpResponse {
     match Todo::update_one(
         doc! { "_id": query.id.to_string() },
-        doc! { "complete": true },
+        doc! { "$set": { "complete": true, "updated_at": chrono::Utc::now() } },
     )
     .await
     {

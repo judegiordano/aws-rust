@@ -56,6 +56,8 @@ pub mod config {
 }
 
 pub mod database {
+    use std::fmt::Debug;
+
     use anyhow::Result;
     use async_once::AsyncOnce;
     use async_trait::async_trait;
@@ -69,7 +71,7 @@ pub mod database {
         Client, Collection, Database,
     };
     use nanoid::nanoid;
-    use serde::{de::DeserializeOwned, Serialize};
+    use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
     use crate::config::Env;
 
@@ -123,6 +125,12 @@ pub mod database {
         pub projection: Option<Document>,
     }
 
+    #[derive(Debug, Deserialize, Serialize)]
+    pub enum Ref<T> {
+        Id(String),
+        Document(T),
+    }
+
     #[async_trait]
     pub trait Model: Unpin + Serialize + Sized + Send + Sync + DeserializeOwned {
         fn collection_name<'a>() -> &'a str;
@@ -147,11 +155,6 @@ pub mod database {
         }
 
         async fn update_one(filter: Document, updates: Document) -> Result<UpdateResult> {
-            let now = chrono::Utc::now();
-            let updates = vec![
-                doc! { "$set": updates },
-                doc! { "$set": { "updated_at": now } },
-            ];
             let updated = Self::collection()
                 .await
                 .update_one(filter, updates, None)
@@ -160,11 +163,6 @@ pub mod database {
         }
 
         async fn update_many(filter: Document, updates: Document) -> Result<UpdateResult> {
-            let now = chrono::Utc::now();
-            let updates = vec![
-                doc! { "$set": updates },
-                doc! { "$set": { "updated_at": now } },
-            ];
             let updated = Self::collection()
                 .await
                 .update_many(filter, updates, None)
@@ -217,9 +215,35 @@ pub mod database {
             let mut results = Self::collection().await.aggregate(pipeline, None).await?;
             let mut docs = vec![];
             while let Some(doc) = results.try_next().await? {
-                docs.push(bson::from_document(doc)?);
+                let document = bson::from_document(doc)?;
+                docs.push(document);
             }
             Ok(docs)
+        }
+
+        async fn read_populate<T: DeserializeOwned>(
+            query: Document,
+            fields: &[&str],
+        ) -> Result<Option<T>> {
+            let mut pipeline = vec![doc! { "$match": query }];
+            for field in fields {
+                pipeline.push(doc! {
+                    "$lookup": {
+                        "from": field,
+                        "localField": field,
+                        "foreignField": "_id",
+                        "as": field
+                    }
+                });
+            }
+            pipeline.push(doc! { "$limit": 1 });
+            let mut results = Self::collection().await.aggregate(pipeline, None).await?;
+            let first = results.try_next().await?;
+            if let Some(doc) = first {
+                let document = bson::from_document::<T>(doc)?;
+                return Ok(Some(document));
+            }
+            return Ok(None);
         }
     }
 }

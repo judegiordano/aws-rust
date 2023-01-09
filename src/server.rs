@@ -2,7 +2,10 @@ use actix_web::{web::scope, App, HttpServer};
 use lambda_web::{is_running_on_lambda, run_actix_on_lambda};
 use tracing_subscriber::FmtSubscriber;
 
-use crate::{api, models::todo::Todo};
+use crate::{
+    api,
+    models::{todo::Todo, user::User},
+};
 use aws_rust::{
     config::{self, Env},
     database::Model,
@@ -13,6 +16,7 @@ pub async fn run() -> anyhow::Result<(), lambda_http::Error> {
     {
         // migrate indexes
         Todo::create_indexes().await?;
+        User::create_indexes().await?;
     }
     let subscriber = FmtSubscriber::builder().with_max_level(log_level).finish();
     tracing::subscriber::set_global_default(subscriber)?;
