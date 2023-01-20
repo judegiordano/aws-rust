@@ -45,6 +45,7 @@ jobs:
           set -ex
           sudo apt-get update
           sudo apt-get install -y musl-tools
+          sudo apt install libssl-dev
           rustc --version
           cargo --version
           rustup --version
