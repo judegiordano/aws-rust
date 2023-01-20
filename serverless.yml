@@ -16,6 +16,7 @@ provider:
     STAGE: ${opt:stage, "dev"}
     LOG_LEVEL: INFO
     MONGO_URI: ${env:MONGO_URI}
+    DATABASE_URL: ${env:DATABASE_URL}
 
 functions:
   # v2 HTTP Api
