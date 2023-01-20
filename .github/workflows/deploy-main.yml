@@ -53,6 +53,9 @@ jobs:
           rustup --version
           rustup toolchain list
 
+      - name: generate prisma client
+        run: cargo prisma generate
+
       - name: add clippy
         run: rustup component add clippy
 
