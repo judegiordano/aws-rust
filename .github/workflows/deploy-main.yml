@@ -53,6 +53,9 @@ jobs:
           rustup --version
           rustup toolchain list
 
+      - name: add openssl
+        run: cargo add openssl@0.10.45 --features vendored
+
       - name: generate prisma client
         run: cargo prisma generate
 
@@ -76,5 +79,3 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   MONGO_URI: ${{ secrets.MONGO_URI }}
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  OPENSSL_LIB_DIR: /usr/lib/x86_64-linux-gnu
-  OPENSSL_INCLUDE_DIR: /usr/include/openssl
