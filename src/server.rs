@@ -1,14 +1,10 @@
-use actix_web::{
-    web::{self, scope},
-    App, HttpServer,
-};
+use actix_web::{web::scope, App, HttpServer};
 use lambda_web::{is_running_on_lambda, run_actix_on_lambda};
 use tracing_subscriber::FmtSubscriber;
 
 use crate::{
     api,
     models::{todo::Todo, user::User},
-    prisma,
 };
 use aws_rust::{
     config::{self, Env},
@@ -24,15 +20,8 @@ pub async fn run() -> anyhow::Result<(), lambda_http::Error> {
     }
     let subscriber = FmtSubscriber::builder().with_max_level(log_level).finish();
     tracing::subscriber::set_global_default(subscriber)?;
-    // initialize prisma
-    let prisma = prisma::new_client().await?;
-    let state = web::Data::new(prisma);
     // launch
-    let factory = move || {
-        App::new()
-            .app_data(state.clone())
-            .service(scope("/api").configure(api::routes))
-    };
+    let factory = move || App::new().service(scope("/api").configure(api::routes));
     if is_running_on_lambda() {
         run_actix_on_lambda(factory).await?;
     } else {

@@ -1,6 +1,7 @@
 pub mod api;
 pub mod models;
 pub mod prisma;
+pub mod prisma_models;
 pub mod server;
 
 #[tokio::main]
