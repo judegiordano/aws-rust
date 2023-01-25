@@ -3,7 +3,7 @@ use serde_json::json;
 
 use crate::{
     prisma::user,
-    prisma_models::{PaginationQuery, PrismaHelpers},
+    prisma_models::{user_model::CreateUser, PaginationQuery, PrismaHelpers},
 };
 
 pub async fn list_users(query: web::Query<PaginationQuery>) -> HttpResponse {
@@ -21,6 +21,14 @@ pub async fn read_by_id(id: web::Path<String>) -> HttpResponse {
             || HttpResponse::NotFound().json(json!({ "error": "no user found" })),
             |found| HttpResponse::Ok().json(found),
         ),
+        Err(err) => HttpResponse::InternalServerError().json(json!({ "error": err.to_string() })),
+    }
+}
+
+pub async fn create_user(body: web::Json<CreateUser>) -> HttpResponse {
+    let created = user::Data::create_user(body.into_inner()).await;
+    match created {
+        Ok(user) => HttpResponse::Created().json(user),
         Err(err) => HttpResponse::InternalServerError().json(json!({ "error": err.to_string() })),
     }
 }
