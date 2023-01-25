@@ -26,9 +26,17 @@ pub async fn read_by_id(id: web::Path<String>) -> HttpResponse {
 }
 
 pub async fn create_user(body: web::Json<CreateUser>) -> HttpResponse {
-    let created = user::Data::create_user(body.into_inner()).await;
+    let created = user::Data::create(body.into_inner()).await;
     match created {
         Ok(user) => HttpResponse::Created().json(user),
+        Err(err) => HttpResponse::InternalServerError().json(json!({ "error": err.to_string() })),
+    }
+}
+
+pub async fn delete_by_id(id: web::Path<String>) -> HttpResponse {
+    let user = user::Data::delete(&id).await;
+    match user {
+        Ok(user) => HttpResponse::Ok().json(user),
         Err(err) => HttpResponse::InternalServerError().json(json!({ "error": err.to_string() })),
     }
 }

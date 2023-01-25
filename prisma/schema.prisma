@@ -44,8 +44,8 @@ model Address {
   updated_at DateTime @updatedAt
 
   // relations
-  user    User   @relation(fields: [user_id], references: [id])
-  user_id String
+  user    User?   @relation(fields: [user_id], references: [id])
+  user_id String?
 
   @@index(state)
   @@index(country)
