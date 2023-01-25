@@ -1,7 +1,7 @@
 use actix_web::{web, HttpResponse};
 use serde_json::json;
 
-use aws_rust::{
+use crate::{
     prisma::user,
     prisma_models::{PaginationQuery, PrismaHelpers},
 };

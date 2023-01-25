@@ -247,6 +247,3 @@ pub mod database {
         }
     }
 }
-
-pub mod prisma;
-pub mod prisma_models;
