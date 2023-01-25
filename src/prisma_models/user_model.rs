@@ -127,6 +127,12 @@ impl user::Data {
     ) -> Result<Vec<address::Data>> {
         let mut queries = vec![];
         for create_address in addresses {
+            let apt_number = if create_address.apt_number.is_some() {
+                create_address.apt_number
+            } else {
+                None
+            };
+            tracing::warn!(apt_number);
             queries.push(client.address().create(
                 create_address.address,
                 create_address.street,
@@ -135,7 +141,7 @@ impl user::Data {
                 create_address.zip,
                 create_address.country,
                 user::id::equals(user_id.to_string()),
-                vec![],
+                vec![address::apt_number::set(apt_number)],
             ));
         }
         let operations = client._batch(queries).await?;
